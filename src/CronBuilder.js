@@ -18,7 +18,9 @@ const styleNameFactory = new BEMHelper('cron-builder');
 type Props = {
     cronExpression: string,
     showResult?: boolean,
-    onChange: Function
+    onChange: Function,
+    generateExpressionText: string,
+    showCronExpression: oolean,
 };
 
 type State = {
@@ -42,7 +44,9 @@ export default class CronBuilder extends PureComponent {
     static defaultProps = {
         cronExpression: '* * * * *',
         showResult: true,
-        onChange: noop
+        onChange: noop,
+        generateExpressionText: "",
+        showCronExpression: true
     };
 
     constructor(props: Props, ctx: Object) {
@@ -80,7 +84,7 @@ export default class CronBuilder extends PureComponent {
     };
 
     render() {
-        const {cronExpression, showResult} = this.props;
+        const {cronExpression, showResult, generateExpressionText, showCronExpression} = this.props;
         const {activeIndex, Component, generatedExpression} = this.state;
         return (
             <div {...styleNameFactory()} >
@@ -121,7 +125,7 @@ export default class CronBuilder extends PureComponent {
                         onClick={this.generateExpression}
                         data-action
                     >
-                        Generate cron expression
+                        {generateExpressionText || "Generate cron expression"}
                     </button>
                 </div>
                 <If condition={!!generatedExpression && showResult}>
@@ -131,11 +135,11 @@ export default class CronBuilder extends PureComponent {
                                 {...styleNameFactory('hr')}
                             />
                             <PrettyExpression expression={generatedExpression} />
-                            <div
+                            {showCronExpression && <div
                                 {...styleNameFactory('result')}
                             >
                                 {generatedExpression}
-                            </div>
+                            </div>}
                         </div>
                     </Then>
                 </If>
